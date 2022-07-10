@@ -1,0 +1,81 @@
+﻿@model Show
+
+@{
+    ViewData["Title"] = "Edit";
+}
+<style>
+    label.error{
+        color : red;
+    }
+</style>
+<h1>Edit</h1>
+
+<h4>Show</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+         <form action="/Shows/Edit" method="post" id = "validate-form-edit-show">
+            @*Hidden data*@
+            <input hidden = "hidden" name = "Show.ShowId" value = "@Model.ShowId"/>
+            <input hidden = "hidden" name = "Show.RoomId" value = "@Model.RoomId"/>
+            <input hidden = "hidden" name = "Show.ShowDate" value = "@Model.ShowDate"/>
+            <div class="form-group">
+                <label for="FilmId" class="control-label">FilmId</label>
+                <select id ="FilmId" name = "Show.FilmId" class ="form-control">
+                    @foreach(Film f in  (List<Film>)ViewBag.films){
+                        if (f.FilmId == Model.FilmId)
+                        {
+                            <option selected = "selected" value = "@f.FilmId">@f.Title</option>
+                        }else{
+                            <option value = "@f.FilmId">@f.Title</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="price" class="control-label">Price</label>
+                <input for="price" value = "@Model.Price" class="form-control" name = "Price"/>
+            </div>
+            <div class="form-group">
+                <label for="Slot" class="control-label">Slot</label>
+                <select id ="Slot" name = "Show.Slot" class ="form-control">
+                    @foreach(int slot in  (List<int>)ViewBag.slotAvailable){
+                       if (slot == Model.Slot)
+                        {
+                            <option selected = "selected" value = "@slot">@slot</option>
+                        }else{
+                            <option value = "@slot">@slot</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+       $('#validate-form-edit-show').validate({
+            rules: {
+                Price: {
+                    required: true,
+                    range: [0, 9999999]
+                }
+            },
+            messages: {
+                Price: {
+                    required: "Price must be from 0 to 999,999",
+                    range: "Price must be from 0 to 999,999"
+                },
+            }
+        });
+    </script>
+}

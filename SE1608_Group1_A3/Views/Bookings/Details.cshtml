@@ -1,0 +1,39 @@
+﻿@model Booking
+@{
+    ViewData["Title"] = "Details";
+    char[] BookedMatrix = (char[])ViewData["BookedMatrix"];
+}
+<h1>Details</h1>
+<div>
+    <h4>Booking</h4>
+    @for(int row = 0; row < 10; row++){
+    for(int col = 0; col < 10; col++)
+    {
+        int index = row * 10 + col;
+        if (BookedMatrix[index] == '1')
+        {
+            <input type="checkbox" disabled checked name = "@index"/>
+        }
+        else
+        {
+            <input type="checkbox" disabled name = "@index"/>
+        }
+    }
+    <br/>
+    }
+    <hr />
+    <table>
+        <tr> 
+            <th><h6 style="margin-right : 50px">Name</h6></th>
+            <td>@Model.Name</td>
+        </tr>
+        <tr> 
+            <th <h6 style="margin-right : 50px">Amount</h6></th>
+            <td>@Model.Amount</td>
+        </tr>
+    </table>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.BookingId">Edit</a> |
+    <a asp-action="Index" asp-route-id="@Model.ShowId">Back to List</a>
+</div>

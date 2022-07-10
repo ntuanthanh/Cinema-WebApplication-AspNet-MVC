@@ -1,0 +1,45 @@
+﻿@model Booking
+@{
+    ViewData["Title"] = "Delete";
+    char[] BookedMatrix = (char[])ViewData["BookedMatrix"];
+}
+<h1>Delete</h1>
+<div>
+    <h4>Are you sure you want to delete this?</h4>
+    <h4>Booking</h4>
+    @for(int row = 0; row < 10; row++){
+    for(int col = 0; col < 10; col++)
+    {
+        int index = row * 10 + col;
+        if (BookedMatrix[index] == '1')
+        {
+            <input type="checkbox" disabled checked name = "@index"/>
+        }
+        else
+        {
+            <input type="checkbox" disabled name = "@index"/>
+        }
+    }
+    <br/>
+    }
+    <hr />
+    <table>
+        <tr> 
+            <th><h6 style="margin-right : 50px">Name</h6></th>
+            <td>@Model.Name</td>
+        </tr>
+        <tr> 
+            <th <h6 style="margin-right : 50px">Amount</h6></th>
+            <td>@Model.Amount</td>
+        </tr>
+        <tr> 
+            <th <h6 style="margin-right : 50px">Show</h6></th>
+            <td>@Model.ShowId</td>
+        </tr>
+    </table>
+</div>
+<form style="margin-top : 10px" asp-action="Delete">
+        <input type="hidden" asp-for="BookingId" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-action="Index" asp-route-id="@Model.ShowId">Back to List</a>
+</form>

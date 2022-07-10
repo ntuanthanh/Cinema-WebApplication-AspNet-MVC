@@ -1,0 +1,92 @@
+﻿@using Microsoft.AspNetCore.Http
+@model SE1608_Group1_A3.Models.Show
+@inject IHttpContextAccessor HttpContextAccessor;
+@{
+    ViewData["Title"] = "Index";
+    string user = HttpContextAccessor.HttpContext.Session.GetString("UserName") ?? "";
+}
+
+<h1>Index</h1>
+<form asp-action="Index">
+    <div class="col-md-4">
+        <div class="form-group">
+            <label asp-for="RoomId"></label>
+            <select id = "RoomId" asp-for="RoomId" asp-items="ViewBag.RoomId" class="form-control"></select>
+        </div>
+        <div class="form-group">
+            <label asp-for="ShowDate"></label>
+            <input type="date" asp-for="ShowDate" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="FilmId"></label>
+            <select asp-for="FilmId" asp-items="ViewBag.FilmId" class="form-control"></select>
+        </div>
+
+        <input type="submit" value="Search" class="btn btn-primary" />
+    </div>
+</form>
+<p>
+    <a style = "color: #0366d6; text-decoration: none;background-color: transparent; cursor: pointer" onclick = "CreateShow()">Create New</a>
+</p>
+@{ int count = (ViewBag.shows as List<Show>).Count;}
+<h4>The number of shows: @count</h4>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ShowDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Slot)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Film)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Room)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (Show item in ViewBag.shows) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ShowDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Slot)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Film.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Room.Name)
+            </td>
+            <td>
+                <a asp-action="Index" asp-controller = "Bookings" asp-route-id="@item.ShowId">Bookings</a> 
+                 @if (user != ""){
+                    <a asp-action="Edit" asp-route-id="@item.ShowId">Edit</a> 
+                    <a asp-action="Details" asp-route-id="@item.ShowId">Details</a> 
+                    <a asp-action="Delete" asp-route-id="@item.ShowId">Delete</a>
+                 }
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        function CreateShow(){
+            var roomId = document.getElementById("RoomId").value;            
+            window.location.href = "/Shows/Create/" + roomId ; 
+        }
+    </script>
+}

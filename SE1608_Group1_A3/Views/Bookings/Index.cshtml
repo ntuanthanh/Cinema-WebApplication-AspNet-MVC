@@ -1,0 +1,59 @@
+﻿@model Booking
+
+@{
+    ViewData["Title"] = "Index";
+    char[] BookedMatrix = (char[])ViewData["BookedMatrix"];
+}
+
+<h1>Index</h1>
+<p>Seats status: </p>
+@for(int row = 0; row < 10; row++){
+    for(int col = 0; col < 10; col++)
+    {
+        int index = row * 10 + col;
+        if (BookedMatrix[index] == '1')
+        {
+            <input type="checkbox" disabled checked name = "@index"/>
+        }
+        else
+        {
+            <input type="checkbox" disabled name = "@index"/>
+        }
+    }
+    <br/>
+}
+<p>
+    <a href = "/Bookings/Create/@ViewData["ShowId"]">Create New</a>
+</p>
+@{ int count = (ViewBag.bookings as List<Booking>).Count;}
+<h4>The number of bookings: @count</h4>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Amount
+            </th>           
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (Booking booking in ViewBag.bookings) {
+        <tr>
+            <td>
+                @booking.Name
+            </td>
+            <td>
+               @booking.Amount
+            </td>           
+            <td>
+                <a asp-action="Edit" asp-route-id="@booking.BookingId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@booking.BookingId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@booking.BookingId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

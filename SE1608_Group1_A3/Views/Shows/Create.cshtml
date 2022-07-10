@@ -1,0 +1,70 @@
+﻿@model SE1608_Group1_A3.Models.Show
+
+@{
+    ViewData["Title"] = "Create";
+}
+<style>
+    label.error{
+        color : red;
+    }
+</style>
+<h1>Create</h1>
+
+<h4>Show</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form action="/Shows/Create" method="post" id = "validate-form-add-show">
+            @*Hidden data*@
+            <input hidden = "hidden" name = "Show.RoomId" value = "@ViewBag.roomId"/>
+            <input hidden = "hidden" name = "Show.ShowDate" value = "@ViewBag.dateShow"/>
+            <div class="form-group">
+                <label for="FilmId" class="control-label">FilmId</label>
+                <select id ="FilmId" name = "Show.FilmId" class ="form-control">
+                    @foreach(Film f in  (List<Film>)ViewBag.films){
+                       <option value = "@f.FilmId">@f.Title</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="price" class="control-label">Price</label>
+                <input for="price" class="form-control" name = "Price"/>
+            </div>
+            <div class="form-group">
+                <label for="Slot" class="control-label">Slot</label>
+                <select id ="Slot" name = "Show.Slot" class ="form-control">
+                    @foreach(int slot in  (List<int>)ViewBag.slotAvailable){
+                       <option value = "@slot">@slot</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+       $('#validate-form-add-show').validate({
+            rules: {
+                Price: {
+                    required: true,
+                    range: [0, 9999999]
+                }
+            },
+            messages: {
+                Price: {
+                    required: "Price must be from 0 to 999,999",
+                    range: "Price must be from 0 to 999,999"
+                },
+            }
+        });
+    </script>
+}
